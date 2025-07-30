@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Potion 3D</title>
+  <style>
+    body { margin: 0; background: transparent; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/examples/js/loaders/GLTFLoader.js"></script>
+
+  <script>
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(0, 0, 3);
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0); // Fondo transparente
+    document.body.appendChild(renderer.domElement);
+
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(2, 2, 2);
+    scene.add(light);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
+    const loader = new THREE.GLTFLoader();
+    loader.load('potion.glb', function (gltf) {
+      const model = gltf.scene;
+      model.scale.set(1.5, 1.5, 1.5);
+      scene.add(model);
+
+      let targetX = 0, targetY = 0;
+      document.addEventListener('mousemove', e => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 2;
+        const y = (e.clientY / window.innerHeight - 0.5) * 2;
+        targetX = y * 0.3;
+        targetY = x * 0.5;
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        model.rotation.x += (targetX - model.rotation.x) * 0.05;
+        model.rotation.y += (targetY - model.rotation.y) * 0.05;
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    });
+  </script>
+</body>
+</html>
