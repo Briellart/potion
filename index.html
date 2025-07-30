@@ -28,7 +28,7 @@
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 
     const loader = new THREE.GLTFLoader();
-    loader.load('potion.glb', function (gltf) {
+    loader.load('https://briellart.github.io/potion/potion.glb', function (gltf) {
       const model = gltf.scene;
       model.scale.set(1.5, 1.5, 1.5);
       scene.add(model);
